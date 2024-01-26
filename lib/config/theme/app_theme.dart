@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 List colores = <Color>[
+  Colors.blue,
   Colors.black,
   Colors.white,
   Colors.red,
@@ -9,6 +10,7 @@ List colores = <Color>[
 ];
 
 class AppTheme {
+
   final int selectedColor;
   final bool isDarkMode;
 
@@ -18,11 +20,32 @@ class AppTheme {
 
   ThemeData getTheme() => ThemeData(
       useMaterial3: true,
+      scaffoldBackgroundColor: const Color(0xFFEEF1F8),
+      fontFamily: "Intel",
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
       colorSchemeSeed: colores[selectedColor],
+      inputDecorationTheme: getDecoration(),
       appBarTheme: const AppBarTheme(centerTitle: true));
+
+  InputDecorationTheme getDecoration() => const InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.white,
+        errorStyle: TextStyle(height: 0),
+        border: defaultInputBorder,
+        enabledBorder: defaultInputBorder,
+        focusedBorder: defaultInputBorder,
+        errorBorder: defaultInputBorder,
+      );
 
   AppTheme copyWith({int? selectedColor, bool? isDarkMode}) => AppTheme(
       selectedColor: selectedColor ?? this.selectedColor,
       isDarkMode: isDarkMode ?? this.isDarkMode);
 }
+
+const defaultInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.all(Radius.circular(20)),
+  borderSide: BorderSide(
+    color: Color(0xFFDEE3F2),
+    width: 1,
+  ),
+);

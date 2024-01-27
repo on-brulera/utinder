@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
+import 'package:utinder/presentation/presentation.dart';
 import 'package:utinder/presentation/screens/components/custom_sign_up.dart';
-
-import '../../widgets/shared/form_component_network.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({
@@ -19,7 +19,7 @@ class _SignInFormState extends State<SignInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isShowLoading = false;
   bool isShowConfetti = false;
-  
+
   bool isSignUpDialogShown = false;
 
   late SMITrigger check;
@@ -49,6 +49,7 @@ class _SignInFormState extends State<SignInForm> {
             isShowLoading = false;
           });
           confetti.fire();
+          context.goNamed(PostsScreen.name);
         });
       } else {
         error.fire();
@@ -151,15 +152,15 @@ class _SignInFormState extends State<SignInForm> {
                   child: ElevatedButton.icon(
                       onPressed: () {
                         Future.delayed(const Duration(milliseconds: 800), () {
+                          setState(() {
+                            isSignUpDialogShown = true;
+                          });
+                          customSignUpDialog(context, onClosed: (_) {
                             setState(() {
-                              isSignUpDialogShown = true;
-                            });
-                            customSignUpDialog(context, onClosed: (_) {
-                              setState(() {
-                                isSignUpDialogShown = false;
-                              });
+                              isSignUpDialogShown = false;
                             });
                           });
+                        });
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 List colores = <Color>[
-  Colors.blue,
   Colors.black,
-  Colors.white,
   Colors.red,
+  Colors.white,
+  Colors.blue,
   Colors.green,
   Colors.amber
 ];
 
 class AppTheme {
-
   final int selectedColor;
   final bool isDarkMode;
 

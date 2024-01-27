@@ -1,5 +1,5 @@
 export 'package:utinder/presentation/widgets/shared/warning_network.dart';
-
+export './providers/theme_provider.dart';
 export 'package:utinder/presentation/screens/components/sign_in_form.dart';
 export 'package:utinder/presentation/screens/components/animated_btn.dart';
 export 'package:utinder/presentation/widgets/shared/subtitle_network.dart';

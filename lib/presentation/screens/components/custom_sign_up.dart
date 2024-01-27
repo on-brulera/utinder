@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:utinder/presentation/presentation.dart';
 
-Future<Object?> customSigninDialog(BuildContext context,
+Future<Object?> customSignUpDialog(BuildContext context,
     {required ValueChanged onClosed}) {
   return showGeneralDialog(
       barrierDismissible: true,
-      barrierLabel: "Sign in",
+      barrierLabel: "Sign up",
       context: context,
       transitionDuration: const Duration(milliseconds: 400),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
@@ -18,7 +18,7 @@ Future<Object?> customSigninDialog(BuildContext context,
       },
       pageBuilder: (context, _, __) => Center(
             child: Container(
-              height: 620,
+              height: 713,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
               decoration: BoxDecoration(
@@ -33,23 +33,17 @@ Future<Object?> customSigninDialog(BuildContext context,
                   children: [
                     Column(children: [
                       Text(
-                        "Bienvenido!",
+                        "Formulario",
                         style: TextStyle(fontSize: 34, fontFamily: "Poppins"),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        child: Text(
-                          "Posts y memes de la mejor Universidad del Norte del País con un click!",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SignInForm(),
+                      
+                      SignUpForm(),
                                   
                     ]),
                     Positioned(
                       left: 0,
                       right: 0,
-                      bottom: -48,
+                      bottom: -50,
                       child: CircleAvatar(
                         radius: 16,
                         backgroundColor: Colors.white,

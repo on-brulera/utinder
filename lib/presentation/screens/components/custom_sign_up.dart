@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:utinder/presentation/presentation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 Future<Object?> customSignUpDialog(BuildContext context,
     {required ValueChanged onClosed}) {
+  const sizeFont = (kIsWeb) ? 34 : 20;
+
   return showGeneralDialog(
       barrierDismissible: true,
       barrierLabel: "Sign up",
@@ -18,13 +21,13 @@ Future<Object?> customSignUpDialog(BuildContext context,
       },
       pageBuilder: (context, _, __) => Center(
             child: Container(
-              height: 713,
+              height: kIsWeb ? 714 : 682,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
               decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.95),
                   borderRadius: const BorderRadius.all(Radius.circular(40))),
-              child: const Scaffold(
+              child: Scaffold(
                 backgroundColor: Colors.transparent,
                 resizeToAvoidBottomInset:
                     false, // avoid overflow error when keyboard shows up
@@ -34,13 +37,11 @@ Future<Object?> customSignUpDialog(BuildContext context,
                     Column(children: [
                       Text(
                         "Formulario",
-                        style: TextStyle(fontSize: 34, fontFamily: "Poppins"),
+                        style: TextStyle(fontSize: sizeFont.toDouble(), fontFamily: "Poppins"),
                       ),
-                      
-                      SignUpForm(),
-                                  
+                      const SignUpForm(),
                     ]),
-                    Positioned(
+                    const Positioned(
                       left: 0,
                       right: 0,
                       bottom: -50,

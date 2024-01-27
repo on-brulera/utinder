@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:rive/rive.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../widgets/shared/form_component_network.dart';
 
@@ -60,6 +61,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    const passwordBottom = (kIsWeb) ? 16 : 0;
+    const buttonBottom = (kIsWeb) ? 24 : 0;
     return Stack(
       children: [
         Form(
@@ -146,7 +149,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 parameterTitle('Password'),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 16),
+                  padding: EdgeInsets.only(top: 8.0, bottom: passwordBottom.toDouble()),
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -163,9 +166,9 @@ class _SignUpFormState extends State<SignUpForm> {
                     )),
                   ),
                 ),
-                const SizedBox(height: 20),
+                if (kIsWeb) const SizedBox(height: 20),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 24),
+                  padding: EdgeInsets.only(top: 9.0, bottom: buttonBottom.toDouble()),
                   child: ElevatedButton.icon(
                       onPressed: () {
                         signIn(context);

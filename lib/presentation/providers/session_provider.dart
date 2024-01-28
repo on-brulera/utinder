@@ -4,13 +4,19 @@ import 'package:utinder/infraestucture/infraestructure.dart';
 
 class SessionNotifier extends StateNotifier<Session> {
   NetworkDatasource server = NetworkDatasource();
+  bool doRequest = false;
+  bool sessionAcepted = false;
 
-  SessionNotifier() : super(Session.getDefaultSession());
+  SessionNotifier() : super(Session.getUnautorizedSession());
 
   void login({required String email, required String password}) async {
+    if (doRequest) return;
+    doRequest = true;
     final newState =
         await server.loginUtinder(email: email, password: password);
     state = newState;
+    sessionAcepted = true;
+    doRequest = false;
   }
 
   void register({
@@ -19,9 +25,19 @@ class SessionNotifier extends StateNotifier<Session> {
     required String email,
     required String username,
     required String faculty,
-  }) async{
-    final newState = await server.registerUtinder(name: name, password: password, email: email, username: username, faculty: faculty);
+  }) async {
+    if (doRequest) return;
+    doRequest = true;
+
+    final newState = await server.registerUtinder(
+        name: name,
+        password: password,
+        email: email,
+        username: username,
+        faculty: faculty);
     state = newState;
+    doRequest = false;
+    sessionAcepted = true;
   }
 }
 

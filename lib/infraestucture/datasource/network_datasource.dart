@@ -12,7 +12,7 @@ class NetworkDatasource {
         "password": password,
       });
       final dataMapper = LoginMapper.fromJson(response.data);
-      final sesion = dataMapper.toSessionEntity();
+      final Session sesion = dataMapper.toSessionEntity();
       return sesion;
     } on DioException catch (e) {
       return Session.getDefaultSession();

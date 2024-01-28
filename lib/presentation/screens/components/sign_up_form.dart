@@ -70,7 +70,33 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.read(sessionProvider);
+    ref.listen(sessionProvider, (previous, next) {
+      if (next.token != "NoToken" && next.token != "NoAutorized") {
+        signUp(context);
+      } else {
+        _emailController.text = '';
+        _passwordController.text = '';
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: const Text(
+                  "Ingrese los datos correctamente"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Aceptar"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+
     const passwordBottom = (kIsWeb) ? 16 : 0;
     const buttonBottom = (kIsWeb) ? 24 : 0;
     return Stack(
@@ -186,31 +212,6 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                             password: _passwordController.text,
                             username: _usernameController.text,
                             faculty: selectedFaculty);
-                        if (session.token == 'NoToken') {
-                          _emailController.text = '';
-                          _namesController.text = '';
-                          _passwordController.text = '';
-                          _usernameController.text = '';
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Error"),
-                                content: const Text("Ingrese los datos correctamente, el username y email deben ser únicos"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Aceptar"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          signUp(context);
-                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),

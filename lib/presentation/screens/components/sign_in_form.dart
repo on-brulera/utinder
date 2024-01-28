@@ -70,7 +70,33 @@ class _SignInFormState extends ConsumerState<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.read(sessionProvider);
+    ref.listen(sessionProvider, (previous, next) {
+      if (next.token != "NoToken" && next.token != "NoAutorized") {
+        signIn(context);
+      } else {
+        _emailController.text = '';
+        _passwordController.text = '';
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: const Text(
+                  "Ingrese los el correo y contraseña correctamente"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Aceptar"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+
     _emailController.text = 'wili@gmail.com';
     _passwordController.text = 'password123';
     return Stack(
@@ -120,34 +146,9 @@ class _SignInFormState extends ConsumerState<SignInForm> {
                   padding: const EdgeInsets.only(top: 8.0, bottom: 24),
                   child: ElevatedButton.icon(
                       onPressed: () {
-                        // ref.watch(sessionProvider.notifier).login(
-                        //     email: _emailController.text,
-                        //     password: _passwordController.text);
-                        // if (session.token == 'NoToken') {
-                        //   _emailController.text = '';
-                        //   _passwordController.text = '';
-                        //   showDialog(
-                        //     context: context,
-                        //     builder: (context) {
-                        //       return AlertDialog(
-                        //         title: const Text("Error"),
-                        //         content: const Text(
-                        //             "Ingrese los el correo y contraseña correctamente"),
-                        //         actions: [
-                        //           TextButton(
-                        //             onPressed: () {
-                        //               Navigator.pop(context);
-                        //             },
-                        //             child: const Text("Aceptar"),
-                        //           ),
-                        //         ],
-                        //       );
-                        //     },
-                        //   );
-                        // } else {
-                        //   signIn(context);
-                        // }
-                        signIn(context);
+                        ref.watch(sessionProvider.notifier).login(
+                            email: _emailController.text,
+                            password: _passwordController.text);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),

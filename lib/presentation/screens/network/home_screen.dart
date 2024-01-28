@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 10),
           )),
           // if (!kIsWeb)
-            // const RiveAnimation.asset('assets/RiveAssets/shapes.riv'),
+          // const RiveAnimation.asset('assets/RiveAssets/shapes.riv'),
           if (!kIsWeb)
             Positioned.fill(
                 child: BackdropFilter(
@@ -61,14 +61,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Spacer(),
-                    const SizedBox(
+                    SizedBox(
                       width: kIsWeb ? 700 : 270,
                       child: Column(children: [
-                        TitleNetwork(),
-                        SizedBox(
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/tinder.png',
+                              height: kIsWeb ? 120 : 0,
+                            ),
+                            const SizedBox(width: 10,),
+                            const TitleNetwork(logo: false),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        const SizedBox(
                           height: 16,
                         ),
-                        SubTitleNetwork(),
+                        const SubTitleNetwork(),
                       ]),
                     ),
                     const Spacer(

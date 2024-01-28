@@ -12,12 +12,15 @@ class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context, ref) {
-    final AppTheme appTheme = ref.watch(themeNotifierProvider);
+    final bool isDark = ref.watch(themeScreenNotifierProvider);
 
     return MaterialApp.router(
       title: 'Utinder',
       debugShowCheckedModeBanner: false,
-      theme: appTheme.getTheme(),
+      // theme: appTheme.getTheme(),
+      theme: lightTheme,
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      darkTheme: darkTheme,
       routerConfig: appRouter,
     );
   }

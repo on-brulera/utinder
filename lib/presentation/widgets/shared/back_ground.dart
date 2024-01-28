@@ -10,7 +10,7 @@ class BackGround extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final bool isDark = ref.watch(isDarkMode);
+    final bool isDark = ref.watch(themeScreenNotifierProvider);
     return Stack(
       children: [
         Container(

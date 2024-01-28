@@ -1,5 +1,9 @@
+export 'package:utinder/presentation/widgets/shared/post_card.dart';
+export './screens/components/post_form.dart';
+export 'package:utinder/presentation/widgets/shared/stories_bar.dart';
+export 'package:utinder/presentation/widgets/shared/custom_app_bar.dart';
+export 'package:utinder/presentation/widgets/shared/back_ground.dart';
 export 'package:utinder/presentation/screens/network/posts_screen.dart';
-
 export 'package:utinder/presentation/widgets/shared/warning_network.dart';
 export './providers/theme_provider.dart';
 export 'package:utinder/presentation/screens/components/sign_in_form.dart';

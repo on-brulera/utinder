@@ -1,22 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
 import 'package:utinder/presentation/presentation.dart';
 import 'package:utinder/presentation/screens/components/custom_sign_up.dart';
+import 'package:utinder/util/util.dart';
 
-class SignInForm extends StatefulWidget {
+class SignInForm extends ConsumerStatefulWidget {
   const SignInForm({
     super.key,
   });
 
   @override
-  State<SignInForm> createState() => _SignInFormState();
+  ConsumerState<SignInForm> createState() => _SignInFormState();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class _SignInFormState extends ConsumerState<SignInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   bool isShowLoading = false;
   bool isShowConfetti = false;
 
@@ -35,12 +41,12 @@ class _SignInFormState extends State<SignInForm> {
     return controller;
   }
 
-  void signIn(BuildContext context) {
+  void signIn(BuildContext context) async {
     setState(() {
       isShowLoading = true;
       isShowConfetti = true;
     });
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () async {
       if (_formKey.currentState!.validate()) {
         // show success
         check.fire();
@@ -64,6 +70,9 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.read(sessionProvider);
+    _emailController.text = 'wili@gmail.com';
+    _passwordController.text = 'password123';
     return Stack(
       children: [
         Form(
@@ -75,10 +84,10 @@ class _SignInFormState extends State<SignInForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
+                    controller: _emailController,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "";
-                      }
+                      if (value!.isEmpty) return "El email es obligatorio";
+                      if (!isEmail(value)) return "Ingrese un email válido";
                       return null;
                     },
                     onSaved: (email) {},
@@ -93,10 +102,9 @@ class _SignInFormState extends State<SignInForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
+                    controller: _passwordController,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "";
-                      }
+                      if (value!.isEmpty) return "La contraseña es obligatoria";
                       return null;
                     },
                     onSaved: (password) {},
@@ -112,7 +120,33 @@ class _SignInFormState extends State<SignInForm> {
                   padding: const EdgeInsets.only(top: 8.0, bottom: 24),
                   child: ElevatedButton.icon(
                       onPressed: () {
-                        signIn(context);
+                        ref.watch(sessionProvider.notifier).login(
+                            email: _emailController.text,
+                            password: _passwordController.text);
+                        if (session.token == 'NoToken') {
+                          _emailController.text = '';
+                          _passwordController.text = '';
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Error"),
+                                content: const Text(
+                                    "Ingrese los el correo y contraseña correctamente"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Aceptar"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          signIn(context);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),
@@ -209,5 +243,23 @@ class _SignInFormState extends State<SignInForm> {
             : const SizedBox()
       ],
     );
+  }
+
+  Future<dynamic> warning() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: const Text('No se encontro el dato'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Acceptar'))
+            ],
+          );
+        });
   }
 }

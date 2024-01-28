@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:utinder/presentation/presentation.dart';
+import 'package:utinder/util/util.dart';
 
-import '../../widgets/shared/form_component_network.dart';
-
-class SignUpForm extends StatefulWidget {
+class SignUpForm extends ConsumerStatefulWidget {
   const SignUpForm({
     super.key,
   });
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  ConsumerState<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignUpFormState extends ConsumerState<SignUpForm> {
   String selectedFaculty = "FICA";
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final TextEditingController _namesController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   bool isShowLoading = false;
   bool isShowConfetti = false;
 
@@ -33,7 +41,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return controller;
   }
 
-  void signIn(BuildContext context) {
+  void signUp(BuildContext context) async {
     setState(() {
       isShowLoading = true;
       isShowConfetti = true;
@@ -47,6 +55,7 @@ class _SignUpFormState extends State<SignUpForm> {
             isShowLoading = false;
           });
           confetti.fire();
+          context.goNamed(PostsScreen.name);
         });
       } else {
         error.fire();
@@ -61,6 +70,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.read(sessionProvider);
     const passwordBottom = (kIsWeb) ? 16 : 0;
     const buttonBottom = (kIsWeb) ? 24 : 0;
     return Stack(
@@ -74,10 +84,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
+                    controller: _namesController,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "";
-                      }
+                      if (value!.isEmpty) return "El nombre es obligatorio";
                       return null;
                     },
                     onSaved: (email) {},
@@ -92,10 +101,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
+                    controller: _usernameController,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "";
-                      }
+                      if (value!.isEmpty) return 'El username es obligatorio';
                       return null;
                     },
                     onSaved: (email) {},
@@ -133,10 +141,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
+                    controller: _emailController,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "";
-                      }
+                      if (value!.isEmpty) return "El email es necesario";
+                      if (!isEmail(value)) return "Ingrese un email válido";
                       return null;
                     },
                     onSaved: (email) {},
@@ -149,12 +157,12 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 parameterTitle('Password'),
                 Padding(
-                  padding: EdgeInsets.only(top: 8.0, bottom: passwordBottom.toDouble()),
+                  padding: EdgeInsets.only(
+                      top: 8.0, bottom: passwordBottom.toDouble()),
                   child: TextFormField(
+                    controller: _passwordController,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "";
-                      }
+                      if (value!.isEmpty) return "El password es obligatorio";
                       return null;
                     },
                     onSaved: (password) {},
@@ -168,10 +176,41 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 if (kIsWeb) const SizedBox(height: 20),
                 Padding(
-                  padding: EdgeInsets.only(top: 9.0, bottom: buttonBottom.toDouble()),
+                  padding: EdgeInsets.only(
+                      top: 9.0, bottom: buttonBottom.toDouble()),
                   child: ElevatedButton.icon(
                       onPressed: () {
-                        signIn(context);
+                        ref.watch(sessionProvider.notifier).register(
+                            email: _emailController.text,
+                            name: _namesController.text,
+                            password: _passwordController.text,
+                            username: _usernameController.text,
+                            faculty: selectedFaculty);
+                        if (session.token == 'NoToken') {
+                          _emailController.text = '';
+                          _namesController.text = '';
+                          _passwordController.text = '';
+                          _usernameController.text = '';
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Error"),
+                                content: const Text("Ingrese los datos correctamente, el username y email deben ser únicos"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Aceptar"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          signUp(context);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),

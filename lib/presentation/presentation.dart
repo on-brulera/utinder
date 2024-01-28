@@ -14,3 +14,4 @@ export 'package:utinder/presentation/screens/network/home_screen.dart';
 export './screens/components/custom_sign_in.dart';
 export './widgets/shared/form_component_network.dart';
 export './screens/components/sign_up_form.dart';
+export './providers/session_provider.dart';

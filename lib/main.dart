@@ -22,6 +22,6 @@ class MyApp extends ConsumerWidget {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       darkTheme: darkTheme,
       routerConfig: appRouter,
-    );
+    );    
   }
 }

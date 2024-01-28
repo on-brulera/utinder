@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:utinder/domain/domain.dart';
 
-
 class PostCard extends StatefulWidget {
   const PostCard({
     super.key,
@@ -18,6 +17,7 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   // ValueListenable expandListener = ValueListenable();
   ValueNotifier<bool> expandListener = ValueNotifier<bool>(false);
+  bool isClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +51,23 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      isClicked = !isClicked;
+                    });
+                  },
                   icon: Icon(
-                    CupertinoIcons.heart_fill,
-                    color: Colors.orange.shade700,
+                    CupertinoIcons.heart,
+                    color: isClicked
+                        ? Colors.orange.shade700
+                        : Colors.black, // Cambia el color según el estado
                     size: 30,
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _showDialog(context);
+                  },
                   icon: const Icon(
                     CupertinoIcons.chat_bubble_2,
                     size: 30,
@@ -113,4 +121,62 @@ class _PostCardState extends State<PostCard> {
     expandListener.dispose();
     super.dispose();
   }
+}
+
+void _showDialog(BuildContext context) {
+  TextEditingController commentController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Comentarios'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min, // Ajusta el tamaño principal
+          children: [
+            ListTile(
+              title: Text('Opción 1'),
+              onTap: () {
+                // Lógica para la opción 1
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Opción 2'),
+              onTap: () {
+                // Lógica para la opción 2
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Opción 3'),
+              onTap: () {
+                // Lógica para la opción 3
+                Navigator.pop(context);
+              },
+            ),
+            SizedBox(height: 16), // Espacio adicional
+            Expanded(
+              child: TextField(
+                controller: commentController,
+                decoration: InputDecoration(
+                  hintText: 'Añadir comentario...',
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Lógica para agregar el comentario
+                String comment = commentController.text;
+                // Aquí puedes realizar acciones con el comentario, como guardarlo o enviarlo.
+                print('Comentario agregado: $comment');
+                Navigator.pop(context);
+              },
+              child: Text('Agregar Comentario'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

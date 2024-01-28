@@ -11,5 +11,20 @@ final appRouter = GoRouter(initialLocation: '/', routes: [
     path: '/posts',
     name: PostsScreen.name,
     builder: (context, state) => const PostsScreen(),
-  )
+  ),
+  GoRoute(
+    path: '/lokingfor',
+    name: LookingForScreen.name,
+    builder: (context, state) => const LookingForScreen(),
+  ),
+  GoRoute(
+    path: '/foryou',
+    name: ForYouScreen.name,
+    builder: (context, state) => const ForYouScreen(),
+  ),
+  GoRoute(
+    path: '/profile',
+    name: ProfileScreen.name,
+    builder: (context, state) => const ProfileScreen(),
+  ),
 ]);

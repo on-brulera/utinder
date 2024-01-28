@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:utinder/presentation/presentation.dart';
 
 class BackGround extends ConsumerWidget {
@@ -10,6 +11,7 @@ class BackGround extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final selectedIndex = ref.watch(navigatorProvider);
     final bool isDark = ref.watch(themeScreenNotifierProvider);
     return Stack(
       children: [
@@ -58,22 +60,43 @@ class BackGround extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.home_filled,
-                        color: Colors.orange.shade700,
-                      ),
+                      onPressed: () {
+                        ref
+                            .watch(navigatorProvider.notifier)
+                            .setIndexNavigator(index: 1);
+                        context.goNamed(PostsScreen.name);
+                      },
+                      icon: activateIconButon(
+                          1, selectedIndex, Icons.home_filled),
                     ),
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(CupertinoIcons.search),
+                      onPressed: () {
+                        ref
+                            .watch(navigatorProvider.notifier)
+                            .setIndexNavigator(index: 2);
+                        context.goNamed(LookingForScreen.name);
+                      },
+                      icon: activateIconButon(
+                          2, selectedIndex, CupertinoIcons.search),
                     ),
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.add_box_outlined),
+                      onPressed: () {
+                        ref
+                            .watch(navigatorProvider.notifier)
+                            .setIndexNavigator(index: 3);
+                        context.goNamed(ForYouScreen.name);
+                      },
+                      icon: activateIconButon(
+                          3, selectedIndex, Icons.add_box_outlined),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ref
+                            .watch(navigatorProvider.notifier)
+                            .setIndexNavigator(index: 4);
+                        context.goNamed(ForYouScreen.name);
+                        context.goNamed(ProfileScreen.name);
+                      },
                       icon: ClipRRect(
                         borderRadius: BorderRadius.circular(122),
                         child: Image.asset(
@@ -92,4 +115,14 @@ class BackGround extends ConsumerWidget {
       ],
     );
   }
+}
+
+Widget activateIconButon(int index, int navigator, IconData icon) {
+  if (index == navigator) {
+    return Icon(
+      icon,
+      color: Colors.orange.shade700,
+    );
+  }
+  return Icon(icon);
 }

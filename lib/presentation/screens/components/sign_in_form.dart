@@ -120,33 +120,34 @@ class _SignInFormState extends ConsumerState<SignInForm> {
                   padding: const EdgeInsets.only(top: 8.0, bottom: 24),
                   child: ElevatedButton.icon(
                       onPressed: () {
-                        ref.watch(sessionProvider.notifier).login(
-                            email: _emailController.text,
-                            password: _passwordController.text);
-                        if (session.token == 'NoToken') {
-                          _emailController.text = '';
-                          _passwordController.text = '';
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Error"),
-                                content: const Text(
-                                    "Ingrese los el correo y contraseña correctamente"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Aceptar"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          signIn(context);
-                        }
+                        // ref.watch(sessionProvider.notifier).login(
+                        //     email: _emailController.text,
+                        //     password: _passwordController.text);
+                        // if (session.token == 'NoToken') {
+                        //   _emailController.text = '';
+                        //   _passwordController.text = '';
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       return AlertDialog(
+                        //         title: const Text("Error"),
+                        //         content: const Text(
+                        //             "Ingrese los el correo y contraseña correctamente"),
+                        //         actions: [
+                        //           TextButton(
+                        //             onPressed: () {
+                        //               Navigator.pop(context);
+                        //             },
+                        //             child: const Text("Aceptar"),
+                        //           ),
+                        //         ],
+                        //       );
+                        //     },
+                        //   );
+                        // } else {
+                        //   signIn(context);
+                        // }
+                        signIn(context);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),

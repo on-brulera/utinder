@@ -1,3 +1,7 @@
+export 'package:utinder/presentation/screens/components/update_profile_form.dart';
+export 'package:utinder/presentation/screens/network/profile_screen.dart';
+export 'package:utinder/presentation/screens/network/for_you_screen.dart';
+export 'package:utinder/presentation/screens/network/looking_for_screen.dart';
 export 'package:utinder/presentation/widgets/shared/post_card.dart';
 export './screens/components/post_form.dart';
 export 'package:utinder/presentation/widgets/shared/stories_bar.dart';
@@ -15,3 +19,5 @@ export './screens/components/custom_sign_in.dart';
 export './widgets/shared/form_component_network.dart';
 export './screens/components/sign_up_form.dart';
 export './providers/session_provider.dart';
+export './providers/navigator_provider.dart';
+export './screens/components/looking_form.dart';

@@ -226,7 +226,7 @@ class _SignUpFormState extends ConsumerState<UpdateProfileForm> {
                         Icons.delete,
                         color: Color(0xFFFE0037),
                       ),
-                      label: const Text("Eliminar")),
+                      label: const Text("Terminar Sesión")),
                 ),
               ],
             )),

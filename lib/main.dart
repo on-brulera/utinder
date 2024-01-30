@@ -17,7 +17,6 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Utinder',
       debugShowCheckedModeBanner: false,
-      // theme: appTheme.getTheme(),
       theme: lightTheme,
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       darkTheme: darkTheme,

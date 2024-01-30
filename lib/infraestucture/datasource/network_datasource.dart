@@ -14,7 +14,7 @@ class NetworkDatasource {
       final dataMapper = LoginMapper.fromJson(response.data);
       final Session sesion = dataMapper.toSessionEntity();
       return sesion;
-    } on DioException catch (e) {
+    } on DioException {
       return Session.getDefaultSession();
     }
   }
@@ -36,8 +36,32 @@ class NetworkDatasource {
         "faculty": faculty,
       });
       return loginUtinder(email: email, password: password);
-    } on DioException catch (e) {
+    } on DioException {
       return Session.getDefaultSession();
+    }
+  }
+
+  Future<Session> updateUtinder(
+      {required String email,
+      required String password,
+      required String name,
+      required String username,
+      required String faculty,
+      required Session session}) async {
+    try {
+      await socialNetworkAPI.put('/auth/update',
+          data: {
+            "name": name,
+            "username": username,
+            "faculty": faculty,
+            "email": email,
+            "password": password,
+          },
+          options: addToken(session.token));
+      final sesion = await loginUtinder(email: email, password: password);
+      return sesion;
+    } on DioException {
+      return session;
     }
   }
 }

@@ -39,6 +39,28 @@ class SessionNotifier extends StateNotifier<Session> {
     doRequest = false;
     sessionAcepted = true;
   }
+
+  void update({
+    required String name,
+    required String password,
+    required String email,
+    required String username,
+    required String faculty,
+  }) async {
+    if (doRequest) return;
+    doRequest = true;
+
+    final newState = await server.updateUtinder(
+        name: name,
+        password: password,
+        email: email,
+        username: username,
+        faculty: faculty,
+        session: state);
+    state = newState;
+    doRequest = false;
+    sessionAcepted = true;
+  }
 }
 
 final sessionProvider = StateNotifierProvider<SessionNotifier, Session>((ref) {

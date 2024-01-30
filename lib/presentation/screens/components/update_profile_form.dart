@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:rive/rive.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:utinder/presentation/presentation.dart';
 import 'package:utinder/util/util.dart';
@@ -24,31 +24,75 @@ class _SignUpFormState extends ConsumerState<UpdateProfileForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool isShowLoading = false;
-  bool isShowConfetti = false;
-
-  StateMachineController getRiveController(Artboard artboard) {
-    StateMachineController? controller =
-        StateMachineController.fromArtboard(artboard, "State Machine 1");
-    artboard.addController(controller!);
-    return controller;
-  }
-
   void updateProfile(BuildContext context) async {
-    setState(() {
-      isShowLoading = true;
-      isShowConfetti = true;
-    });
+    setState(() {});
     Future.delayed(const Duration(seconds: 1), () {
-      if (formKey.currentState!.validate()) {
-        // show success
-      }
+      Future.delayed(const Duration(seconds: 1), () async {
+        if (formKey.currentState!.validate()) {
+          // show success
+          Future.delayed(const Duration(seconds: 2), () {
+            setState(() {});
+          });
+        } else {
+          Future.delayed(const Duration(seconds: 2), () {
+            setState(() {});
+          });
+        }
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final session = ref.read(sessionProvider);
+
+    _emailController.text = session.user.email;
+    _namesController.text = session.user.name;
+    _usernameController.text = session.profile.username;
+
+    ref.listen(sessionProvider, (previous, next) {
+      if (previous?.token != next.token) {
+        updateProfile(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Notificación"),
+              content: const Text(
+                  "Usuario Actualizado correctamente"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Aceptar"),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: const Text(
+                  "Ingrese los datos correctamente, el username y email deben ser únicos"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Aceptar"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+
     const passwordBottom = (kIsWeb) ? 16 : 0;
     const buttonBottom = (kIsWeb) ? 24 : 0;
     return Stack(
@@ -158,38 +202,12 @@ class _SignUpFormState extends ConsumerState<UpdateProfileForm> {
                       top: 9.0, bottom: buttonBottom.toDouble()),
                   child: ElevatedButton.icon(
                       onPressed: () {
-                        ref.watch(sessionProvider.notifier).register(
+                        ref.watch(sessionProvider.notifier).update(
                             email: _emailController.text,
                             name: _namesController.text,
                             password: _passwordController.text,
                             username: _usernameController.text,
                             faculty: selectedFaculty);
-                        if (session.token == 'NoToken') {
-                          _emailController.text = '';
-                          _namesController.text = '';
-                          _passwordController.text = '';
-                          _usernameController.text = '';
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Error"),
-                                content: const Text(
-                                    "Ingrese los datos correctamente, el username y email deben ser únicos"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Aceptar"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          updateProfile(context);
-                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),
@@ -211,7 +229,7 @@ class _SignUpFormState extends ConsumerState<UpdateProfileForm> {
                       top: 9.0, bottom: buttonBottom.toDouble()),
                   child: ElevatedButton.icon(
                       onPressed: () {
-                        
+                        context.goNamed(HomeScreen.name);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF77D8E),
@@ -230,25 +248,6 @@ class _SignUpFormState extends ConsumerState<UpdateProfileForm> {
                 ),
               ],
             )),
-        isShowLoading
-            ? CustomPositioned(
-                child: RiveAnimation.asset(
-                "assets/RiveAssets/check.riv",
-                onInit: (artboard) {                  
-                },
-              ))
-            : const SizedBox(),
-        isShowConfetti
-            ? CustomPositioned(
-                child: Transform.scale(
-                scale: 6,
-                child: RiveAnimation.asset(
-                  "assets/RiveAssets/confetti.riv",
-                  onInit: (artboard) {                    
-                  },
-                ),
-              ))
-            : const SizedBox()
       ],
     );
   }

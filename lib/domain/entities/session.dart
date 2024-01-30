@@ -9,12 +9,13 @@ class Session {
 
   static getDefaultSession() => Session(
       user: User(name: 'name', email: 'email'),
-      profile: Profile(
-          username: 'username', faculty: 'faculty', profileLink: 'profileLink'),
+      profile: Profile(username: 'username', faculty: 'faculty'),
       token: 'NoToken');
   static getUnautorizedSession() => Session(
       user: User(name: 'name', email: 'email'),
       profile: Profile(
-          username: 'username', faculty: 'faculty', profileLink: 'profileLink'),
+        username: 'username',
+        faculty: 'faculty',
+      ),
       token: 'NoAutorized');
 }

@@ -28,11 +28,11 @@ class LoginMapper {
       };
 
   Session toSessionEntity() => Session(
-      user: User(name: user.name, email: user.email),
+      user: User(id: user.id,name: user.name, email: user.email),
       profile: Profile(
           username: profile.username,
           faculty: profile.faculty,
-          profileLink: profile.profileLink),
+          ),
       token: token);
 }
 
@@ -40,7 +40,6 @@ class ProfileMapper {
   final int id;
   final String username;
   final String faculty;
-  final String profileLink;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -48,7 +47,6 @@ class ProfileMapper {
     required this.id,
     required this.username,
     required this.faculty,
-    required this.profileLink,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -57,7 +55,6 @@ class ProfileMapper {
         id: json["id"],
         username: json["username"],
         faculty: json["faculty"],
-        profileLink: (json["profileLink"] is String)? json["profileLink"]: 'No image',
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
@@ -66,7 +63,6 @@ class ProfileMapper {
         "id": id,
         "username": username,
         "faculty": faculty,
-        "profileLink": profileLink,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
       };
